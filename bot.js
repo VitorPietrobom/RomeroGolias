@@ -186,11 +186,6 @@ client.on('message', msg  => {
         
     }
 
-    else if (command === "bomdia"){
-        msg.react('🌞');
-        msg.reply("BOM DIA FLOR DO DIA!!!!!!"); 
-    }
-
     else if (command === "update-anime"){
         if(args[1] === "episodio"){
             msg.react('👌');
@@ -256,10 +251,7 @@ client.on('message', msg  => {
     
     else if (command === 'help'){
         if (!args.length){
-            msg.reply('funções disponíveis: bomdia, cadastrar, comparar, update-jogos, update-anime');
-        }
-        else if (args[0] === ("bomdia")){
-            msg.reply('da um feliz bom dia para quem deu o comando \n Uso: *bomdia');
+            msg.reply('funções disponíveis: cadastrar, comparar, update-jogos, update-anime');
         }
         else if (args[0] === ("cadastrar")){
             msg.reply('cadastra um novo usuario no sistema, possibilitando comparar os jogos \n Uso: *cadastrar {mencao Discord} {Id na Steam}');
