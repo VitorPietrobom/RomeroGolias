@@ -1,5 +1,6 @@
 const firebase = require('./firebase');
 const getGames = require('./steam.js');
+const generateImage = require('./openAI.js');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MESSAGES] });
 const keys = require('./keys')
@@ -20,9 +21,6 @@ var playerId;
 const queue = new Map();
 
 
-
-
-// ------------------------------------------------------------------------------------- JOGOS
 async function getDoc(reason, collection, userName)  {
     const user = db.collection(collection).doc(userName);
         const doc = await user.get();
@@ -118,11 +116,9 @@ async function pushNewEpisode(anime,episode,link){
     });
     
 }
-// ------------------------------------------------------------------------------------- JOGOS
 
 
 
-// ------------------------------------------------------------------------------------- ACTIONS
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -234,36 +230,32 @@ client.on('message', msg  => {
 
     }
 
-    else if (msg.content.startsWith(`${prefix}play`)) {
-        execute(msg, serverQueue);
-        return;
-    } 
-    
-    else if (msg.content.startsWith(`${prefix}skip`)) {
-        skip(msg, serverQueue);
-        return;
-    } 
-    
-    else if (msg.content.startsWith(`${prefix}stop`)) {
-        stop(msg, serverQueue);
-        return;
+    else if (command === "generate-image"){
+        msg.react('👌');
+        generateImage(args[0]).then(image_url => {
+            msg.reply('Aqui está a imagem gerada: ');
+            msg.channel.send(image_url);
+        });
     }
     
     else if (command === 'help'){
         if (!args.length){
-            msg.reply('funções disponíveis: cadastrar, comparar, update-jogos, update-anime');
+            msg.reply('Funções disponíveis: cadastrar, comparar, update-jogos, update-anime, generate-image');
         }
         else if (args[0] === ("cadastrar")){
-            msg.reply('cadastra um novo usuario no sistema, possibilitando comparar os jogos \n Uso: *cadastrar {mencao Discord} {Id na Steam}');
+            msg.reply('Cadastra um novo usuario no sistema, possibilitando comparar os jogos \n Uso: *cadastrar {mencao Discord} {Id na Steam}');
         }
         else if (args[0] === ("comparar")){
-            msg.reply('compara a lista de dois ou mais usuarios, dando como resultado os jogos em comum \n Uso: *comparar {mencao Usuario 1} {mencao Usuario 2} ... {mencao Usuario n}');
+            msg.reply('Compara a lista de dois ou mais usuarios, dando como resultado os jogos em comum \n Uso: *comparar {mencao Usuario 1} {mencao Usuario 2} ... {mencao Usuario n}');
         }
         else if (args[0] === ("update-jogos")){
-            msg.reply('atualiza os jogos possuidos de um usuario \n Uso: *update-jogos {mencao Discord}');
+            msg.reply('Atualiza os jogos possuidos de um usuario \n Uso: *update-jogos {mencao Discord}');
         }
         else if (args[0] === ("update-anime")){
-            msg.reply('atualiza de acordo com o pedido o anime mencionado \n Uso: *update-anime {Anime} {episodio} {Numero do episodio}');
+            msg.reply('Atualiza de acordo com o pedido o anime mencionado \n Uso: *update-anime {Anime} {episodio} {Numero do episodio}');
+        }
+        else if (args[0] === ("generate-image")){
+            msg.reply('Gera uma imagem utilizando o modelo dall-e 2 da OpenAI \n Uso: *generate-image {Prompt}');
         }
         
     }
