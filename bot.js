@@ -1,7 +1,5 @@
 const firebase = require('./firebase');
 const getGames = require('./steam.js');
-const getGameName = require('./steam.js');
-const Discord = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MESSAGES] });
 const keys = require('./keys')
